@@ -1,143 +1,259 @@
-<!-- views/pages/about.erb -->
-<section class="page-header">
+<!-- Заголовок страницы -->
+<section class="py-5 bg-light">
     <div class="container">
-        <h1 class="page-title">О клинике</h1>
-    </div>
-</section>
-
-<section class="about-content">
-    <div class="container">
-        <div class="about-section">
-            <h2>Наша философия</h2>
-            <p>В основе работы клиники лежат три принципа: научный подход, уважение к пациенту и постоянное развитие. Мы верим, что качественная медицина должна быть доступной и понятной.</p>
-        </div>
-        
-        <div class="about-section">
-            <h2>Доктор Медведева</h2>
-            <div class="director-info">
-                <div class="director-photo-placeholder">
-                    [Фото доктора Медведевой]
-                </div>
-                <div class="director-details">
-                    <h3>Елена Владимировна Медведева</h3>
-                    <p class="director-title">Главный врач, основатель клиники</p>
-                    <ul>
-                        <li>Опыт работы: более 15 лет</li>
-                        <li>Кандидат медицинских наук</li>
-                        <li>Член Российского общества доказательной медицины</li>
-                        <li>Автор 20+ научных публикаций</li>
-                    </ul>
-                    <p>"Моя цель — создать место, где пациенты получают лечение, соответствующее самым высоким международным стандартам, с вниманием и заботой."</p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="about-section">
-            <h2>Наши преимущества</h2>
-            <div class="advantages-grid">
-                <div class="advantage">
-                    <h4>Современное оборудование</h4>
-                    <p>Диагностика на аппаратах экспертного класса от ведущих мировых производителей.</p>
-                </div>
-                <div class="advantage">
-                    <h4>Междисциплинарный подход</h4>
-                    <p>Сложные случаи разбираются консилиумом специалистов разных профилей.</p>
-                </div>
-                <div class="advantage">
-                    <h4>Прозрачность</h4>
-                    <p>Честные цены, подробные планы лечения, отсутствие скрытых платежей.</p>
-                </div>
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-3">О клинике</h1>
+                <p class="lead text-muted mb-0">Наша философия, ценности и подход к лечению</p>
             </div>
         </div>
     </div>
 </section>
 
-<style>
-.page-header {
-    background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
-    color: var(--white);
-    padding: 60px 0;
-    text-align: center;
-}
+<!-- Философия -->
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6">
+                <h2 class="display-6 fw-bold mb-4">Наша философия</h2>
+                <p class="text-muted mb-4">
+                    В основе работы клиники лежат три принципа: научный подход, уважение к пациенту и постоянное развитие. 
+                    Мы верим, что качественная медицина должна быть доступной, понятной и эффективной для каждого.
+                </p>
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-wrapper icon-wrapper-primary flex-shrink-0">
+                                <i class="bi bi-clipboard2-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Научный подход</h5>
+                                <p class="text-muted small mb-0">Лечение на основе доказательной медицины и международных протоколов</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="icon-wrapper icon-wrapper-secondary flex-shrink-0">
+                                <i class="bi bi-person-heart fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Забота о пациенте</h5>
+                                <p class="text-muted small mb-0">Индивидуальный подход и внимание к каждому пациенту</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="position-relative">
+                    <div class="ratio ratio-16x9 rounded-4 overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                             class="img-fluid" 
+                             alt="Современное оборудование клиники">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-.page-title {
-    font-size: 2.5rem;
-}
+<!-- Доктор Медведева -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-5">
+                <div class="position-relative">
+                    <div class="rounded-4 overflow-hidden shadow-lg">
+                        <img src="https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             class="img-fluid" 
+                             alt="Доктор Медведева">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <h2 class="display-6 fw-bold mb-4">Доктор Медведева</h2>
+                <h4 class="fw-bold text-primary mb-3">Елена Владимировна Медведева</h4>
+                <p class="text-muted mb-4 fst-italic">Главный врач, основатель клиники, кандидат медицинских наук</p>
+                
+                <div class="mb-4">
+                    <p class="text-muted mb-3">
+                        "Моя цель — создать место, где пациенты получают лечение, соответствующее самым высоким международным стандартам, 
+                        с вниманием, заботой и пониманием их потребностей."
+                    </p>
+                </div>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-award text-primary"></i>
+                            <span>Опыт работы: более 15 лет</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-mortarboard text-primary"></i>
+                            <span>Кандидат медицинских наук</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-file-earmark-medical text-primary"></i>
+                            <span>Член Российского общества доказательной медицины</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <i class="bi bi-journal-text text-primary"></i>
+                            <span>Автор 20+ научных публикаций</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-.about-content {
-    padding: 60px 0;
-}
+<!-- Преимущества -->
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold mb-3">Наши преимущества</h2>
+            <p class="text-muted lead">Почему пациенты выбирают нашу клинику</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-primary flex-shrink-0">
+                                <i class="bi bi-cpu fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Современное оборудование</h5>
+                                <p class="text-muted mb-0">
+                                    Диагностика на аппаратах экспертного класса от ведущих мировых производителей.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-secondary flex-shrink-0">
+                                <i class="bi bi-people fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Междисциплинарный подход</h5>
+                                <p class="text-muted mb-0">
+                                    Сложные случаи разбираются консилиумом специалистов разных профилей.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-primary flex-shrink-0">
+                                <i class="bi bi-eye fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Прозрачность</h5>
+                                <p class="text-muted mb-0">
+                                    Честные цены, подробные планы лечения, отсутствие скрытых платежей.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-secondary flex-shrink-0">
+                                <i class="bi bi-clock-history fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Экономия времени</h5>
+                                <p class="text-muted mb-0">
+                                    Минимальное ожидание приема, удобная онлайн-запись, быстрое получение результатов.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-primary flex-shrink-0">
+                                <i class="bi bi-shield-check fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Безопасность</h5>
+                                <p class="text-muted mb-0">
+                                    Строгое соблюдение санитарных норм, стерилизация инструментов, безопасные процедуры.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex align-items-start gap-3 mb-3">
+                            <div class="icon-wrapper icon-wrapper-secondary flex-shrink-0">
+                                <i class="bi bi-chat-square-heart fs-4"></i>
+                            </div>
+                            <div>
+                                <h5 class="fw-bold mb-2">Поддержка</h5>
+                                <p class="text-muted mb-0">
+                                    Консультации после лечения, сопровождение пациентов, ответы на вопросы.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-.about-section {
-    margin-bottom: 60px;
-}
-
-.about-section h2 {
-    font-size: 1.8rem;
-    color: var(--secondary-accent);
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid var(--primary-accent);
-}
-
-.director-info {
-    display: grid;
-    grid-template-columns: 300px 1fr;
-    gap: 40px;
-    align-items: start;
-}
-
-.director-photo-placeholder {
-    height: 400px;
-    background-color: var(--background-light);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--text-light);
-}
-
-.director-details h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.director-title {
-    font-style: italic;
-    color: var(--text-light);
-    margin-bottom: 20px;
-}
-
-.director-details ul {
-    margin: 20px 0;
-    padding-left: 20px;
-}
-
-.advantages-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
-}
-
-.advantage {
-    background: var(--white);
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-}
-
-.advantage h4 {
-    color: var(--secondary-accent);
-    margin-bottom: 15px;
-}
-
-@media (max-width: 768px) {
-    .director-info {
-        grid-template-columns: 1fr;
-    }
-    
-    .director-photo-placeholder {
-        height: 300px;
-    }
-}
-</style>
+<!-- Статистика -->
+<section class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center g-4">
+            <div class="col-md-3 col-6">
+                <div class="display-4 fw-bold mb-2">15+</div>
+                <p class="mb-0 opacity-75">Лет работы</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="display-4 fw-bold mb-2">25+</div>
+                <p class="mb-0 opacity-75">Врачей-специалистов</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="display-4 fw-bold mb-2">15 000+</div>
+                <p class="mb-0 opacity-75">Пациентов доверяют</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="display-4 fw-bold mb-2">98%</div>
+                <p class="mb-0 opacity-75">Довольных пациентов</p>
+            </div>
+        </div>
+    </div>
+</section>

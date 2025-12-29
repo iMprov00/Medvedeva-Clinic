@@ -1,6 +1,5 @@
-// Дополнение к public/js/app.js
+// Мобильное меню
 document.addEventListener('DOMContentLoaded', function() {
-    // Мобильное меню - улучшенная версия
     const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
     const nav = document.querySelector('.nav');
     const body = document.body;
@@ -12,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
             body.style.overflow = nav.classList.contains('active') ? 'hidden' : '';
         });
         
-        // Закрытие меню при клике на ссылку (на мобильных)
+        // Закрытие меню при клике на ссылку
         const navLinks = document.querySelectorAll('.nav__link');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
@@ -48,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (targetElement) {
                     window.scrollTo({
-                        top: targetElement.offsetTop - 80,
+                        top: targetElement.offsetTop - 100,
                         behavior: 'smooth'
                     });
                 }
@@ -56,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Динамическое обновление заголовка при скролле
+    // Динамическое обновление шапки при скролле
     let lastScroll = 0;
     const header = document.querySelector('.header');
     
@@ -81,37 +80,120 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Добавляем стили для скролла шапки
-    const style = document.createElement('style');
-    style.textContent = `
-        .scroll-down {
-            transform: translateY(-100%);
+    // Добавляем анимацию появления элементов при скролле
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Наблюдаем за карточками и другими элементами
+    document.querySelectorAll('.doctor-card, .feature-card, .service-item, .doc-item').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Обработка форм
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Здесь должна быть отправка формы на сервер
+            // Для демо просто покажем сообщение
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.textContent = 'Отправка...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
+                contactForm.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        });
+    }
+    
+    // Динамический поиск для врачей
+    const doctorSearchInput = document.getElementById('doctor-search');
+    const doctorSearchBtn = document.getElementById('search-doctor-btn');
+    const specialtyFilter = document.getElementById('specialty-filter');
+    
+    if (doctorSearchInput || specialtyFilter) {
+        function performDoctorSearch() {
+            // Здесь будет AJAX запрос для поиска врачей
+            console.log('Поиск врачей...');
         }
         
-        .scroll-up {
-            transform: translateY(0);
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        if (doctorSearchBtn) {
+            doctorSearchBtn.addEventListener('click', performDoctorSearch);
         }
         
-        .header {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        if (doctorSearchInput) {
+            doctorSearchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performDoctorSearch();
+                }
+            });
         }
         
-        .mobile-menu-btn.active span:nth-child(1) {
-            transform: rotate(45deg) translate(6px, 6px);
+        if (specialtyFilter) {
+            specialtyFilter.addEventListener('change', performDoctorSearch);
+        }
+    }
+    
+    // Динамический поиск для услуг
+    const serviceSearchInput = document.getElementById('service-search');
+    const serviceSearchBtn = document.getElementById('search-service-btn');
+    const categoryFilter = document.getElementById('category-filter');
+    
+    if (serviceSearchInput || categoryFilter) {
+        function performServiceSearch() {
+            // Здесь будет AJAX запрос для поиска услуг
+            console.log('Поиск услуг...');
         }
         
-        .mobile-menu-btn.active span:nth-child(2) {
-            opacity: 0;
+        if (serviceSearchBtn) {
+            serviceSearchBtn.addEventListener('click', performServiceSearch);
         }
         
-        .mobile-menu-btn.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
+        if (serviceSearchInput) {
+            serviceSearchInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    performServiceSearch();
+                }
+            });
         }
         
-        .mobile-menu-btn span {
-            transition: transform 0.3s ease, opacity 0.3s ease;
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', performServiceSearch);
         }
-    `;
-    document.head.appendChild(style);
+    }
+    
+    // Улучшение мобильного опыта
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+    }
+});
+
+// Добавляем обработку клавиши Escape для закрытия меню
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const nav = document.querySelector('.nav');
+        
+        if (nav && nav.classList.contains('active')) {
+            nav.classList.remove('active');
+            mobileMenuBtn.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    }
 });

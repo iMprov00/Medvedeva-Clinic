@@ -1,34 +1,46 @@
-<!-- views/dynamic/_doctor_card.erb -->
-<div class="doctor-card fade-in-up" data-specialties="<%= doctor.specialties.downcase %>">
-    <div class="doctor-photo">
+<div class="card doctor-card shadow-sm border-0 h-100">
+    <div class="position-relative">
         <% if doctor.photo_path %>
-            <img src="<%= doctor.photo_path %>" alt="<%= doctor.full_name %>" style="width:100%; height:100%; object-fit:cover;">
+            <img src="<%= doctor.photo_path %>" 
+                 class="card-img-top" 
+                 alt="<%= doctor.full_name %>"
+                 style="height: 280px; object-fit: cover;">
         <% else %>
-            <div style="display:flex; align-items:center; justify-content:center; height:100%;">
-                <span>Фото врача</span>
+            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" 
+                 style="height: 280px;">
+                <i class="bi bi-person-circle display-1 text-muted"></i>
             </div>
+        <% end %>
+        <% if doctor.experience_years && doctor.experience_years > 10 %>
+            <span class="position-absolute top-0 end-0 m-3 badge bg-primary rounded-pill">
+                Опыт <%= doctor.experience_years %> лет
+            </span>
         <% end %>
     </div>
     
-    <div class="doctor-info">
-        <h3 class="doctor-name"><%= doctor.full_name %></h3>
+    <div class="card-body d-flex flex-column">
+        <h5 class="card-title fw-bold mb-2"><%= doctor.full_name %></h5>
         
-        <div class="doctor-specialties">
-            <%= doctor.specialties %>
+        <div class="mb-3">
+            <span class="badge bg-secondary-light text-primary mb-2">
+                <%= doctor.specialties %>
+            </span>
         </div>
         
-        <% if doctor.experience_years %>
-            <span class="doctor-experience">
-                Опыт работы: <%= doctor.experience_text %>
-            </span>
-        <% end %>
-        
-        <p class="doctor-bio">
-            <%= doctor.bio.truncate(150) %>
+        <p class="card-text text-muted flex-grow-1 mb-4">
+            <%= doctor.bio.truncate(120) %>
         </p>
         
-        <div class="doctor-footer" style="margin-top: auto;">
-            <a href="/contacts" class="btn btn-primary" style="width: 100%;">Записаться</a>
+        <div class="mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <a href="/contacts" class="btn btn-primary btn-sm">
+                    <i class="bi bi-calendar-check me-1"></i>Запись
+                </a>
+                <small class="text-muted">
+                    <i class="bi bi-star-fill text-warning me-1"></i>
+                    4.8
+                </small>
+            </div>
         </div>
     </div>
 </div>
