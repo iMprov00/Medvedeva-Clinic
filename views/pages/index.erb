@@ -1,0 +1,233 @@
+<!-- views/pages/index.erb -->
+<section class="hero">
+    <div class="container">
+        <div class="hero__content">
+            <h1 class="hero__title">Клиника доказательной медицины<br>доктора Медведевой</h1>
+            <p class="hero__subtitle">Здоровье, основанное на фактах. Забота, основанная на опыте.</p>
+            <a href="/contacts" class="btn btn-primary">Записаться на прием</a>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="container">
+        <h2 class="section-title">Наши принципы</h2>
+        <div class="features__grid">
+            <div class="feature-card">
+                <div class="feature-card__icon">🔬</div>
+                <h3 class="feature-card__title">Доказательная медицина</h3>
+                <p class="feature-card__text">Принимаем решения на основе современных международных протоколов и клинических исследований.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card__icon">👩‍⚕️</div>
+                <h3 class="feature-card__title">Опытные специалисты</h3>
+                <p class="feature-card__text">Наши врачи постоянно повышают квалификацию и следят за последними достижениями медицины.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card__icon">💬</div>
+                <h3 class="feature-card__title">Честность и открытость</h3>
+                <p class="feature-card__text">Объясняем диагнозы и лечение доступным языком, не назначаем лишних обследований.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-card__icon">❤️</div>
+                <h3 class="feature-card__title">Индивидуальный подход</h3>
+                <p class="feature-card__text">Для каждого пациента разрабатываем персонализированную программу лечения и наблюдения.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="about-preview">
+    <div class="container">
+        <div class="about-preview__inner">
+            <div class="about-preview__content">
+                <h2 class="section-title">О клинике</h2>
+                <p>Клиника доктора Медведевой была основана в 2010 году с целью создания медицинского учреждения, где во главу угла ставятся принципы доказательной медицины и индивидуальный подход к каждому пациенту.</p>
+                <p>За годы работы мы помогли тысячам пациентов, заслужив доверие благодаря профессионализму нашей команды и современному подходу к лечению.</p>
+                <a href="/about" class="btn btn-secondary">Подробнее о клинике</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="container">
+        <h2 class="cta-title">Готовы позаботиться о своем здоровье?</h2>
+        <p>Запишитесь на прием к нашим специалистам уже сегодня</p>
+        <div class="cta-buttons">
+            <a href="/contacts" class="btn btn-primary">Записаться на прием</a>
+            <a href="/doctors" class="btn btn-secondary">Наши врачи</a>
+        </div>
+    </div>
+</section>
+
+<style>
+.hero {
+    background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+    color: var(--white);
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero__title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.hero__subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    opacity: 0.9;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--white);
+    color: var(--secondary-accent);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--secondary-accent);
+    border: 2px solid var(--secondary-accent);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-size: 2rem;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.features__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.feature-card {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.feature-card__icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.feature-card__title {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: var(--secondary-accent);
+}
+
+.about-preview {
+    padding: 80px 0;
+    background-color: var(--background-light);
+}
+
+.about-preview__content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-preview__content p {
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+</style>
+
+<style>
+/* Дополнительные стили для главной страницы */
+.hero {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(126, 255, 205, 0.9), rgba(229, 167, 255, 0.9));
+    z-index: 1;
+}
+
+.hero .container {
+    position: relative;
+    z-index: 2;
+}
+
+.feature-card {
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card__icon {
+    font-size: 3rem;
+    margin-bottom: 25px;
+}
+
+/* Секция призыва к действию */
+.cta-section {
+    background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.cta-title {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .hero__title {
+        font-size: 2rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-buttons .btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+</style>

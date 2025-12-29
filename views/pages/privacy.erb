@@ -1,0 +1,77 @@
+<!-- views/pages/privacy.erb -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Политика конфиденциальности</h1>
+    </div>
+</section>
+
+<section class="privacy-section">
+    <div class="container">
+        <div class="privacy-content">
+            <p class="last-updated">Последнее обновление: <%= Date.today.strftime('%d.%m.%Y') %></p>
+            
+            <h2>1. Общие положения</h2>
+            <p>Настоящая политика конфиденциальности определяет порядок обработки и защиты информации о физических лицах, использующих услуги Клиники доказательной медицины доктора Медведевой.</p>
+            
+            <h2>2. Собираемая информация</h2>
+            <p>Мы собираем только ту информацию, которая необходима для оказания медицинских услуг:</p>
+            <ul>
+                <li>ФИО, контактные данные</li>
+                <li>Медицинская история и данные о здоровье</li>
+                <li>Данные о посещениях и оказанных услугах</li>
+            </ul>
+            
+            <h2>3. Использование информации</h2>
+            <p>Собранная информация используется исключительно для:</p>
+            <ul>
+                <li>Оказания медицинских услуг</li>
+                <li>Записи на прием и напоминаний</li>
+                <li>Внутренней статистики и улучшения качества услуг</li>
+            </ul>
+            
+            <h2>4. Защита информации</h2>
+            <p>Мы принимаем все необходимые меры для защиты ваших персональных данных от несанкционированного доступа, изменения, раскрытия или уничтожения.</p>
+            
+            <h2>5. Контакты</h2>
+            <p>По всем вопросам, связанным с обработкой персональных данных, вы можете обратиться по электронной почте: <a href="mailto:privacy@medvedeva-clinic.ru">privacy@medvedeva-clinic.ru</a></p>
+        </div>
+    </div>
+</section>
+
+<style>
+.privacy-section {
+    padding: 60px 0;
+}
+
+.privacy-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.privacy-content h2 {
+    color: var(--secondary-accent);
+    margin: 40px 0 20px;
+    font-size: 1.5rem;
+}
+
+.privacy-content p {
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.privacy-content ul {
+    margin: 20px 0;
+    padding-left: 25px;
+}
+
+.privacy-content li {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.last-updated {
+    color: var(--text-light);
+    font-style: italic;
+    margin-bottom: 40px;
+}
+</style>

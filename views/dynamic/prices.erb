@@ -1,0 +1,129 @@
+<!-- views/dynamic/prices.erb -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Услуги и цены</h1>
+        <p class="page-subtitle">Прозрачное ценообразование и полный список медицинских услуг</p>
+    </div>
+</section>
+
+<section class="prices-section">
+    <div class="container">
+        <!-- Панель поиска и фильтров -->
+        <div class="prices-controls">
+            <div class="search-box">
+                <input type="text" 
+                       id="service-search" 
+                       placeholder="Поиск услуг по названию, описанию..." 
+                       class="search-input">
+                <button id="search-service-btn" class="search-btn">Найти</button>
+            </div>
+            
+            <div class="filters">
+                <select id="category-filter" class="filter-select">
+                    <option value="">Все категории</option>
+                    <% @service_categories.each do |category| %>
+                        <option value="<%= category.id %>"><%= category.name %></option>
+                    <% end %>
+                </select>
+                <button id="reset-service-filters" class="reset-btn">Сбросить</button>
+            </div>
+        </div>
+        
+        <!-- Состояние загрузки -->
+        <div id="service-loading-indicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Поиск услуг...</p>
+        </div>
+        
+        <!-- Список услуг -->
+        <div class="services-list" id="services-list">
+            <% if @service_categories.empty? %>
+                <div class="empty-state">
+                    <p>Услуги не найдены.</p>
+                </div>
+            <% else %>
+                <% @service_categories.each do |category| %>
+                    <%= erb :'dynamic/_service_category', locals: { category: category } %>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</section>
+
+<script>
+// JavaScript для динамического поиска услуг
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('service-search');
+    const searchBtn = document.getElementById('search-service-btn');
+    const categoryFilter = document.getElementById('category-filter');
+    const resetBtn = document.getElementById('reset-service-filters');
+    const servicesList = document.getElementById('services-list');
+    const loadingIndicator = document.getElementById('service-loading-indicator');
+    
+    // Функция для выполнения поиска услуг
+    function performServiceSearch() {
+        const query = searchInput.value.trim();
+        const categoryId = categoryFilter.value;
+        
+        // Показываем индикатор загрузки
+        loadingIndicator.style.display = 'flex';
+        servicesList.style.opacity = '0.5';
+        
+        // Отправляем AJAX-запрос
+        fetch('/services/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: query,
+                category_id: categoryId
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Обновляем список услуг
+            servicesList.innerHTML = data.html;
+            
+            // Скрываем индикатор загрузки
+            loadingIndicator.style.display = 'none';
+            servicesList.style.opacity = '1';
+            
+            // Добавляем анимацию появления
+            setTimeout(() => {
+                servicesList.classList.add('fade-in');
+                setTimeout(() => {
+                    servicesList.classList.remove('fade-in');
+                }, 300);
+            }, 50);
+        })
+        .catch(error => {
+            console.error('Ошибка поиска услуг:', error);
+            loadingIndicator.style.display = 'none';
+            servicesList.style.opacity = '1';
+        });
+    }
+    
+    // События для поиска услуг
+    searchBtn.addEventListener('click', performServiceSearch);
+    searchInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            performServiceSearch();
+        }
+    });
+    
+    // Событие для фильтра по категории
+    categoryFilter.addEventListener('change', performServiceSearch);
+    
+    // Сброс фильтров
+    resetBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        categoryFilter.value = '';
+        performServiceSearch();
+    });
+    
+    // Инициализация (поиск при загрузке страницы)
+    performServiceSearch();
+});
+</script>

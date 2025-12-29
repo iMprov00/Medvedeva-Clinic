@@ -1,0 +1,34 @@
+<!-- views/dynamic/_doctor_card.erb -->
+<div class="doctor-card fade-in-up" data-specialties="<%= doctor.specialties.downcase %>">
+    <div class="doctor-photo">
+        <% if doctor.photo_path %>
+            <img src="<%= doctor.photo_path %>" alt="<%= doctor.full_name %>" style="width:100%; height:100%; object-fit:cover;">
+        <% else %>
+            <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+                <span>Фото врача</span>
+            </div>
+        <% end %>
+    </div>
+    
+    <div class="doctor-info">
+        <h3 class="doctor-name"><%= doctor.full_name %></h3>
+        
+        <div class="doctor-specialties">
+            <%= doctor.specialties %>
+        </div>
+        
+        <% if doctor.experience_years %>
+            <span class="doctor-experience">
+                Опыт работы: <%= doctor.experience_text %>
+            </span>
+        <% end %>
+        
+        <p class="doctor-bio">
+            <%= doctor.bio.truncate(150) %>
+        </p>
+        
+        <div class="doctor-footer" style="margin-top: auto;">
+            <a href="/contacts" class="btn btn-primary" style="width: 100%;">Записаться</a>
+        </div>
+    </div>
+</div>

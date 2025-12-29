@@ -1,0 +1,143 @@
+<!-- views/pages/about.erb -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">О клинике</h1>
+    </div>
+</section>
+
+<section class="about-content">
+    <div class="container">
+        <div class="about-section">
+            <h2>Наша философия</h2>
+            <p>В основе работы клиники лежат три принципа: научный подход, уважение к пациенту и постоянное развитие. Мы верим, что качественная медицина должна быть доступной и понятной.</p>
+        </div>
+        
+        <div class="about-section">
+            <h2>Доктор Медведева</h2>
+            <div class="director-info">
+                <div class="director-photo-placeholder">
+                    [Фото доктора Медведевой]
+                </div>
+                <div class="director-details">
+                    <h3>Елена Владимировна Медведева</h3>
+                    <p class="director-title">Главный врач, основатель клиники</p>
+                    <ul>
+                        <li>Опыт работы: более 15 лет</li>
+                        <li>Кандидат медицинских наук</li>
+                        <li>Член Российского общества доказательной медицины</li>
+                        <li>Автор 20+ научных публикаций</li>
+                    </ul>
+                    <p>"Моя цель — создать место, где пациенты получают лечение, соответствующее самым высоким международным стандартам, с вниманием и заботой."</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="about-section">
+            <h2>Наши преимущества</h2>
+            <div class="advantages-grid">
+                <div class="advantage">
+                    <h4>Современное оборудование</h4>
+                    <p>Диагностика на аппаратах экспертного класса от ведущих мировых производителей.</p>
+                </div>
+                <div class="advantage">
+                    <h4>Междисциплинарный подход</h4>
+                    <p>Сложные случаи разбираются консилиумом специалистов разных профилей.</p>
+                </div>
+                <div class="advantage">
+                    <h4>Прозрачность</h4>
+                    <p>Честные цены, подробные планы лечения, отсутствие скрытых платежей.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.page-header {
+    background: linear-gradient(135deg, var(--primary-accent), var(--secondary-accent));
+    color: var(--white);
+    padding: 60px 0;
+    text-align: center;
+}
+
+.page-title {
+    font-size: 2.5rem;
+}
+
+.about-content {
+    padding: 60px 0;
+}
+
+.about-section {
+    margin-bottom: 60px;
+}
+
+.about-section h2 {
+    font-size: 1.8rem;
+    color: var(--secondary-accent);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--primary-accent);
+}
+
+.director-info {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.director-photo-placeholder {
+    height: 400px;
+    background-color: var(--background-light);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+}
+
+.director-details h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+}
+
+.director-title {
+    font-style: italic;
+    color: var(--text-light);
+    margin-bottom: 20px;
+}
+
+.director-details ul {
+    margin: 20px 0;
+    padding-left: 20px;
+}
+
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.advantage {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.advantage h4 {
+    color: var(--secondary-accent);
+    margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+    .director-info {
+        grid-template-columns: 1fr;
+    }
+    
+    .director-photo-placeholder {
+        height: 300px;
+    }
+}
+</style>

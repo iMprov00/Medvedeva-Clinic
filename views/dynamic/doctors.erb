@@ -1,0 +1,239 @@
+<!-- views/dynamic/doctors.erb -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Наши врачи</h1>
+        <p class="page-subtitle">Профессиональная команда специалистов, которые помогут вам сохранить здоровье</p>
+    </div>
+</section>
+
+<section class="doctors-section">
+    <div class="container">
+        <!-- Панель поиска и фильтров -->
+        <div class="doctors-controls">
+            <div class="search-box">
+                <input type="text" 
+                       id="doctor-search" 
+                       placeholder="Поиск врачей по имени, фамилии, специальности..." 
+                       class="search-input">
+                <button id="search-doctor-btn" class="search-btn">Найти</button>
+            </div>
+            
+            <div class="filters">
+                <select id="specialty-filter" class="filter-select">
+                    <option value="">Все специальности</option>
+                    <% @specialties.each do |specialty| %>
+                        <option value="<%= specialty %>"><%= specialty %></option>
+                    <% end %>
+                </select>
+                <button id="reset-filters" class="reset-btn">Сбросить</button>
+            </div>
+        </div>
+        
+        <!-- Состояние загрузки -->
+        <div id="loading-indicator" class="loading-indicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Поиск врачей...</p>
+        </div>
+        
+        <!-- Список врачей -->
+        <div class="doctors-list" id="doctors-list">
+            <% if @doctors.empty? %>
+                <div class="empty-state">
+                    <p>Врачи не найдены. Попробуйте изменить условия поиска.</p>
+                </div>
+            <% else %>
+                <% @doctors.each do |doctor| %>
+                    <%= erb :'dynamic/_doctor_card', locals: { doctor: doctor } %>
+                <% end %>
+            <% end %>
+        </div>
+    </div>
+</section>
+
+<script>
+// JavaScript для динамического поиска врачей
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('doctor-search');
+    const searchBtn = document.getElementById('search-doctor-btn');
+    const specialtyFilter = document.getElementById('specialty-filter');
+    const resetBtn = document.getElementById('reset-filters');
+    const doctorsList = document.getElementById('doctors-list');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    
+    // Функция для выполнения поиска
+    function performSearch() {
+        const query = searchInput.value.trim();
+        const specialty = specialtyFilter.value;
+        
+        // Показываем индикатор загрузки
+        loadingIndicator.style.display = 'flex';
+        doctorsList.style.opacity = '0.5';
+        
+        // Отправляем AJAX-запрос
+        fetch('/doctors/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+                query: query,
+                specialty: specialty
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Обновляем список врачей
+            doctorsList.innerHTML = data.html;
+            
+            // Скрываем индикатор загрузки
+            loadingIndicator.style.display = 'none';
+            doctorsList.style.opacity = '1';
+            
+            // Добавляем анимацию появления
+            setTimeout(() => {
+                doctorsList.classList.add('fade-in');
+                setTimeout(() => {
+                    doctorsList.classList.remove('fade-in');
+                }, 300);
+            }, 50);
+        })
+        .catch(error => {
+            console.error('Ошибка поиска:', error);
+            loadingIndicator.style.display = 'none';
+            doctorsList.style.opacity = '1';
+        });
+    }
+    
+    // События для поиска
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            performSearch();
+        }
+    });
+    
+    // Событие для фильтра по специальности
+    specialtyFilter.addEventListener('change', performSearch);
+    
+    // Сброс фильтров
+    resetBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        specialtyFilter.value = '';
+        performSearch();
+    });
+    
+    // Инициализация (поиск при загрузке страницы)
+    // Загружаем начальные данные
+    performSearch();
+});
+</script>
+
+<style>
+/* Дополняем существующие стили */
+.doctors-controls {
+    background: var(--background-light);
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--primary-accent);
+}
+
+.search-btn {
+    padding: 12px 25px;
+    background: var(--secondary-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background: #d18cff;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.filter-select {
+    flex: 1;
+    padding: 12px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: white;
+}
+
+.reset-btn {
+    padding: 12px 25px;
+    background: transparent;
+    color: var(--text-light);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.reset-btn:hover {
+    border-color: var(--primary-accent);
+    color: var(--primary-accent);
+}
+
+.loading-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    color: var(--text-light);
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-accent);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+</style>

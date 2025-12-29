@@ -1,0 +1,194 @@
+<!-- views/pages/contacts.erb -->
+<section class="page-header">
+    <div class="container">
+        <h1 class="page-title">Контакты</h1>
+    </div>
+</section>
+
+<section class="contacts-content">
+    <div class="container">
+        <div class="contacts-grid">
+            <div class="contacts-info">
+                <h2>Клиника доказательной медицины<br>доктора Медведевой</h2>
+                
+                <div class="contact-block">
+                    <h3>Адрес</h3>
+                    <p>г. Москва, ул. Примерная, д. 10<br>Вход со стороны двора</p>
+                </div>
+                
+                <div class="contact-block">
+                    <h3>Телефоны</h3>
+                    <p>
+                        <a href="tel:+79991234567">+7 (999) 123-45-67</a> (основной)<br>
+                        <a href="tel:+79998765432">+7 (999) 876-54-32</a> (дополнительный)
+                    </p>
+                </div>
+                
+                <div class="contact-block">
+                    <h3>Электронная почта</h3>
+                    <p>
+                        <a href="mailto:info@medvedeva-clinic.ru">info@medvedeva-clinic.ru</a><br>
+                        <a href="mailto:appointment@medvedeva-clinic.ru">appointment@medvedeva-clinic.ru</a> (для записи)
+                    </p>
+                </div>
+                
+                <div class="contact-block">
+                    <h3>Часы работы</h3>
+                    <table class="schedule-table">
+                        <tr>
+                            <td>Понедельник - Пятница</td>
+                            <td>8:00 - 20:00</td>
+                        </tr>
+                        <tr>
+                            <td>Суббота</td>
+                            <td>9:00 - 18:00</td>
+                        </tr>
+                        <tr>
+                            <td>Воскресенье</td>
+                            <td>10:00 - 16:00</td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="contact-block">
+                    <h3>Экстренная связь</h3>
+                    <p>Для экстренных случаев в нерабочее время: <a href="tel:+79995554433">+7 (999) 555-44-33</a></p>
+                </div>
+            </div>
+            
+            <div class="contacts-form">
+                <h3>Напишите нам</h3>
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Ваше имя</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Телефон</label>
+                        <input type="tel" id="phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Сообщение</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Отправить сообщение</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <h3>Как добраться</h3>
+            <div class="map-placeholder">
+                [Здесь будет интерактивная Яндекс.Карта]
+                <p>Ближайшее метро: "Примерная" (5 минут пешком)</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.contacts-content {
+    padding: 60px 0;
+}
+
+.contacts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+}
+
+.contact-block {
+    margin-bottom: 30px;
+}
+
+.contact-block h3 {
+    color: var(--secondary-accent);
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.contact-block a {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.contact-block a:hover {
+    color: var(--primary-accent);
+}
+
+.schedule-table {
+    width: 100%;
+}
+
+.schedule-table td {
+    padding: 5px 0;
+}
+
+.schedule-table td:first-child {
+    padding-right: 20px;
+}
+
+.contacts-form {
+    background: var(--background-light);
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.contacts-form h3 {
+    color: var(--secondary-accent);
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.map-container {
+    margin-top: 60px;
+}
+
+.map-placeholder {
+    height: 400px;
+    background-color: var(--background-light);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    margin-top: 20px;
+    text-align: center;
+}
+
+@media (max-width: 992px) {
+    .contacts-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+</style>

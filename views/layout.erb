@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиника доказательной медицины доктора Медведевой</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="/js/app.js" defer></script>
+
+<meta name="description" content="Клиника доказательной медицины доктора Медведевой. Современный подход к лечению, основанный на научных данных и индивидуальном подходе к каждому пациенту.">
+<meta name="keywords" content="клиника, доказательная медицина, врач, лечение, здоровье">
+<meta property="og:title" content="Клиника доказательной медицины доктора Медведевой">
+<meta property="og:description" content="Современный подход к лечению, основанный на научных данных">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://medvedeva-clinic.ru">
+
+<!-- Фавиконки -->
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<!-- Канонический URL -->
+<link rel="canonical" href="https://medvedeva-clinic.ru">
+
+<!-- Для мобильных устройств -->
+<meta name="theme-color" content="#7effcd">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header__inner">
+                <a href="/" class="logo">
+                    <span class="logo__text">Клиника доктора Медведевой</span>
+                </a>
+                
+                <nav class="nav">
+                    <ul class="nav__list">
+                        <li class="nav__item"><a href="/" class="nav__link <%= 'active' if request.path == '/' %>">Главная</a></li>
+                        <li class="nav__item"><a href="/about" class="nav__link <%= 'active' if request.path == '/about' %>">О клинике</a></li>
+                        <li class="nav__item"><a href="/doctors" class="nav__link <%= 'active' if request.path == '/doctors' %>">Врачи</a></li>
+                        <li class="nav__item"><a href="/prices" class="nav__link <%= 'active' if request.path == '/prices' %>">Услуги и цены</a></li>
+                        <li class="nav__item"><a href="/contacts" class="nav__link <%= 'active' if request.path == '/contacts' %>">Контакты</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="header__phone">
+                    <a href="tel:+79991234567" class="phone-link">+7 (999) 123-45-67</a>
+                </div>
+                
+                <button class="mobile-menu-btn" aria-label="Открыть меню">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <%= yield %>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <div class="footer__col">
+                    <div class="footer__logo">Клиника доктора Медведевой</div>
+                    <p class="footer__description">Доказательная медицина. Профессионализм. Забота.</p>
+                </div>
+                
+                <div class="footer__col">
+                    <h3 class="footer__title">Контакты</h3>
+                    <address class="footer__contacts">
+                        <p>г. Москва, ул. Примерная, д. 10</p>
+                        <p><a href="tel:+79991234567">+7 (999) 123-45-67</a></p>
+                        <p><a href="mailto:info@medvedeva-clinic.ru">info@medvedeva-clinic.ru</a></p>
+                    </address>
+                </div>
+                
+                <div class="footer__col">
+                    <h3 class="footer__title">Часы работы</h3>
+                    <p>Пн-Пт: 8:00 - 20:00</p>
+                    <p>Сб: 9:00 - 18:00</p>
+                    <p>Вс: 10:00 - 16:00</p>
+                </div>
+                
+                <div class="footer__col">
+                    <h3 class="footer__title">Социальные сети</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Telegram">TG</a>
+                        <a href="#" class="social-link" aria-label="ВКонтакте">VK</a>
+                        <a href="#" class="social-link" aria-label="Instagram">IG</a>
+                    </div>
+                    <div class="footer__docs">
+                        <a href="/docs" class="docs-link">Лицензии и документы</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer__map">
+                <div id="map" style="height: 300px; width: 100%; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #666;">
+                    [Здесь будет Яндекс.Карта]
+                </div>
+            </div>
+            
+            <div class="footer__bottom">
+                <p class="copyright">© <%= Time.now.year %> Клиника доказательной медицины доктора Медведевой. Все права защищены.</p>
+                <a href="/privacy" class="privacy-link">Политика конфиденциальности</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
