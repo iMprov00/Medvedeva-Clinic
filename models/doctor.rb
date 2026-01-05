@@ -18,8 +18,8 @@ class Doctor < ActiveRecord::Base
     end
     
     # Фильтр по специальности
-    if specialty_filter.present?
-      doctors = doctors.joins(:specialties).where("specialties.name LIKE ?", "%#{specialty_filter}%")
+    if specialty_filter.present? && !specialty_filter.empty?
+      doctors = doctors.joins(:specialties).where('specialties.name = ?', specialty_filter)
     end
     
     doctors.order(:last_name, :first_name)

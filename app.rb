@@ -69,7 +69,7 @@ post '/doctors/search' do
   
   @doctors = Doctor.search(query, specialty)
   
-  # Генерируем HTML для списка врачей
+  # Генерируем HTML для списка врачей, обернутый в колонки
   html = if @doctors.empty?
     '<div class="empty-state"><p>Врачи не найдены. Попробуйте изменить условия поиска.</p></div>'
   else
@@ -79,11 +79,6 @@ post '/doctors/search' do
   end
   
   { html: html, count: @doctors.count }.to_json
-end
-
-get '/prices' do
-  @service_categories = ServiceCategory.includes(:services).all
-  erb :'dynamic/prices'
 end
 
 # AJAX поиск услуг
@@ -182,10 +177,14 @@ end
 
 # Добавление врача
 # Добавление врача
+# Добавление врача
 post '/admin/doctors' do
   begin
+    puts "DEBUG: Начало добавления врача"
+    puts "DEBUG: Параметры: #{params.inspect}"
+    
     # Создаем врача
-    doctor = Doctor.create(
+    doctor = Doctor.new(
       last_name: params[:doctor][:last_name],
       first_name: params[:doctor][:first_name],
       middle_name: params[:doctor][:middle_name],
@@ -194,34 +193,50 @@ post '/admin/doctors' do
       photo_path: params[:doctor][:photo_path]
     )
     
+    puts "DEBUG: Врач создан, но не сохранен: #{doctor.inspect}"
+    
     # Добавляем специальности
     if params[:doctor][:specialty_ids]
+      puts "DEBUG: Выбранные специальности: #{params[:doctor][:specialty_ids]}"
       params[:doctor][:specialty_ids].each do |specialty_id|
         specialty = Specialty.find(specialty_id)
         doctor.specialties << specialty
       end
     end
     
-    # Обработка загрузки фотографии
-    if params[:photo] && params[:photo][:tempfile]
-      photo = params[:photo]
-      photo_path = params[:doctor][:photo_path] || "/images/doctors/doctor_#{doctor.id}.jpg"
+    # Сохраняем врача
+    if doctor.save
+      puts "DEBUG: Врач сохранен успешно, ID: #{doctor.id}"
       
-      # Создаем директорию если её нет
-      FileUtils.mkdir_p('public/images/doctors')
-      
-      # Сохраняем файл
-      File.open("public#{photo_path}", 'wb') do |f|
-        f.write(photo[:tempfile].read)
+      # Обработка загрузки фотографии
+      if params[:photo] && params[:photo][:tempfile]
+        photo = params[:photo]
+        photo_path = params[:doctor][:photo_path] || "/images/doctors/doctor_#{doctor.id}.jpg"
+        
+        puts "DEBUG: Загрузка фото в: #{photo_path}"
+        
+        # Создаем директорию если её нет
+        FileUtils.mkdir_p('public/images/doctors')
+        
+        # Сохраняем файл
+        File.open("public#{photo_path}", 'wb') do |f|
+          f.write(photo[:tempfile].read)
+        end
+        
+        # Обновляем путь к фото
+        doctor.update(photo_path: photo_path)
+        puts "DEBUG: Фото сохранено"
       end
       
-      # Обновляем путь к фото
-      doctor.update(photo_path: photo_path)
+      redirect '/admin/doctors'
+    else
+      puts "DEBUG: Ошибка при сохранении врача: #{doctor.errors.full_messages}"
+      redirect '/admin/doctors'
     end
     
-    redirect '/admin/doctors'
   rescue => e
-    puts "Ошибка при добавлении врача: #{e.message}"
+    puts "DEBUG: Исключение при добавлении врача: #{e.message}"
+    puts "DEBUG: Backtrace: #{e.backtrace.first(10)}"
     redirect '/admin/doctors'
   end
 end

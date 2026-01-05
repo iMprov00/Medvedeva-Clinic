@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_031917) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_033131) do
   create_table "doctors", force: :cascade do |t|
     t.text "bio", null: false
     t.datetime "created_at", null: false
@@ -19,7 +19,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_031917) do
     t.string "last_name", null: false
     t.string "middle_name"
     t.string "photo_path"
-    t.text "specialties", null: false
     t.datetime "updated_at", null: false
     t.index ["last_name", "first_name", "middle_name"], name: "index_doctors_on_last_name_and_first_name_and_middle_name"
   end

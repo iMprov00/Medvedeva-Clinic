@@ -22,7 +22,7 @@
                     <input type="text" 
                            id="doctor-search" 
                            class="form-control border-start-0" 
-                           placeholder="Поиск врачей по имени, специальности...">
+                           placeholder="Поиск врачей по ФИО...">
                 </div>
             </div>
             <div class="col-md-4">
@@ -60,27 +60,6 @@
                 <% end %>
             </div>
         </div>
-        
-        <!-- Пагинация (пример) -->
-        <div class="mt-5">
-            <nav aria-label="Навигация по страницам">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">
-                            <i class="bi bi-chevron-left"></i>
-                        </a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">
-                            <i class="bi bi-chevron-right"></i>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
     </div>
 </section>
 
@@ -92,33 +71,73 @@ document.addEventListener('DOMContentLoaded', function() {
     const doctorsList = document.getElementById('doctors-list');
     
     function filterDoctors() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const specialty = specialtyFilter.value.toLowerCase();
+        const searchTerm = searchInput.value;
+        const specialty = specialtyFilter.value;
         
         fetch('/doctors/search', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({
+            body: new URLSearchParams({
                 query: searchTerm,
                 specialty: specialty
             })
         })
         .then(response => response.json())
         .then(data => {
-            doctorsList.innerHTML = data.html;
+            if (data.html) {
+                // Обернем HTML в колонки, чтобы сохранить структуру сетки
+                let html = '';
+                if (data.count === 0) {
+                    html = '<div class="col-12"><div class="text-center py-5"><i class="bi bi-people display-1 text-muted mb-3"></i><h4 class="mb-3">Врачи не найдены</h4><p class="text-muted">Попробуйте изменить условия поиска</p></div></div>';
+                } else {
+                    // Разделим HTML на отдельные карточки и обернем каждую в колонку
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.html;
+                    
+                    // Если карточки уже обернуты в колонки, используем как есть
+                    if (tempDiv.querySelector('.col-md-6') || tempDiv.querySelector('.col-lg-4')) {
+                        html = data.html;
+                    } else {
+                        // Иначе обернем каждую карточку в колонку
+                        const cards = tempDiv.querySelectorAll('.doctor-card, .empty-state');
+                        cards.forEach(card => {
+                            html += '<div class="col-md-6 col-lg-4 fade-in-up">' + card.outerHTML + '</div>';
+                        });
+                    }
+                }
+                doctorsList.innerHTML = html;
+            }
         })
-        .catch(error => console.error('Ошибка:', error));
+        .catch(error => {
+            console.error('Ошибка:', error);
+            doctorsList.innerHTML = '<div class="col-12"><div class="alert alert-danger">Ошибка при загрузке данных</div></div>';
+        });
     }
     
-    searchInput.addEventListener('input', filterDoctors);
-    specialtyFilter.addEventListener('change', filterDoctors);
-    resetBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        specialtyFilter.value = '';
-        filterDoctors();
-    });
+    // Дебаунс для поиска
+    let timeoutId;
+    function debouncedSearch() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(filterDoctors, 300);
+    }
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', debouncedSearch);
+    }
+    
+    if (specialtyFilter) {
+        specialtyFilter.addEventListener('change', filterDoctors);
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            if (searchInput) searchInput.value = '';
+            if (specialtyFilter) specialtyFilter.value = '';
+            filterDoctors();
+        });
+    }
 });
 </script>
