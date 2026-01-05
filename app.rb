@@ -166,9 +166,43 @@ end
 # Управление сообщениями
 get '/admin/messages' do
   @messages = Message.all
+  @appointments = Appointment.all
   erb :'admin/messages', layout: false
 end
+post '/admin/messages/:id/mark-read' do
+  message = Message.find(params[:id])
+  message.update(status: 'read')
+  redirect '/admin/messages'
+end
 
+post '/admin/messages/:id/mark-replied' do
+  message = Message.find(params[:id])
+  message.update(status: 'replied')
+  redirect '/admin/messages'
+end
+
+post '/admin/messages/:id/delete' do
+  Message.find(params[:id]).destroy
+  redirect '/admin/messages'
+end
+
+# Действия с записями
+post '/admin/appointments/:id/confirm' do
+  appointment = Appointment.find(params[:id])
+  appointment.update(status: 'confirmed')
+  redirect '/admin/messages'
+end
+
+post '/admin/appointments/:id/cancel' do
+  appointment = Appointment.find(params[:id])
+  appointment.update(status: 'cancelled')
+  redirect '/admin/messages'
+end
+
+post '/admin/appointments/:id/delete' do
+  Appointment.find(params[:id]).destroy
+  redirect '/admin/messages'
+end
 # Управление врачами
 get '/admin/doctors' do
   @doctors = Doctor.all.order(:last_name, :first_name)
@@ -345,4 +379,44 @@ helpers do
       return many
     end
   end
+end
+
+
+# Получение специальностей врача
+get '/doctors/:id/specialties' do
+  content_type :json
+  doctor = Doctor.find(params[:id])
+  doctor.specialties.to_json(only: [:id, :name])
+end
+
+post '/appointments' do
+  content_type :json
+  
+  begin
+    appointment = Appointment.new(
+      patient_name: params[:patient_name],
+      birth_date: params[:birth_date],
+      phone: params[:phone],
+      email: params[:email],
+      doctor_id: params[:doctor_id].presence,
+      specialty_id: params[:specialty_id],  # Здесь важно!
+      message: params[:message],
+      privacy_accepted: params[:privacy_accepted] == '1'
+    )
+
+    if appointment.save
+      { success: true, message: 'Запись успешно отправлена! Мы свяжемся с вами в ближайшее время.' }.to_json
+    else
+      { success: false, errors: appointment.errors.full_messages }.to_json
+    end
+  rescue => e
+    puts "Ошибка при создании записи: #{e.message}"
+    { success: false, error: 'Произошла ошибка при отправке записи' }.to_json
+  end
+end
+
+# Получение всех специальностей
+get '/specialties' do
+  content_type :json
+  Specialty.all.to_json(only: [:id, :name])
 end

@@ -10,7 +10,35 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_033131) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_051921) do
+  create_table "appointments", force: :cascade do |t|
+    t.date "birth_date", null: false
+    t.datetime "created_at", null: false
+    t.integer "doctor_id"
+    t.string "email", null: false
+    t.text "message"
+    t.string "patient_name", null: false
+    t.string "phone", null: false
+    t.boolean "privacy_accepted", default: false, null: false
+    t.boolean "read", default: false, null: false
+    t.integer "specialty_id"
+    t.string "status", default: "new", null: false
+    t.datetime "updated_at", null: false
+    t.index ["doctor_id"], name: "index_appointments_on_doctor_id"
+    t.index ["read"], name: "index_appointments_on_read"
+    t.index ["specialty_id"], name: "index_appointments_on_specialty_id"
+    t.index ["status"], name: "index_appointments_on_status"
+  end
+
+  create_table "appointments_specialties", id: false, force: :cascade do |t|
+    t.integer "appointment_id"
+    t.integer "specialty_id"
+    t.index ["appointment_id", "specialty_id"], name: "idx_appoint_spec_on_appoint_spec", unique: true
+    t.index ["appointment_id"], name: "index_appointments_specialties_on_appointment_id"
+    t.index ["specialty_id", "appointment_id"], name: "idx_appoint_spec_on_spec_appoint"
+    t.index ["specialty_id"], name: "index_appointments_specialties_on_specialty_id"
+  end
+
   create_table "doctors", force: :cascade do |t|
     t.text "bio", null: false
     t.datetime "created_at", null: false
@@ -37,8 +65,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_033131) do
     t.string "name", null: false
     t.string "phone", null: false
     t.boolean "read", default: false
+    t.string "status", default: "new"
     t.string "subject", null: false
     t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_messages_on_status"
   end
 
   create_table "service_categories", force: :cascade do |t|
@@ -75,5 +105,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_033131) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "appointments", "doctors"
+  add_foreign_key "appointments", "specialties"
   add_foreign_key "services", "service_categories"
 end

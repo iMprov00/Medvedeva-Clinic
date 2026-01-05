@@ -99,88 +99,238 @@ document.addEventListener('DOMContentLoaded', function() {
         observer.observe(el);
     });
     
-    // Обработка форм
-    const contactForm = document.getElementById('contact-form');
+    // Обработка формы контактов
+    const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Здесь должна быть отправка формы на сервер
-            // Для демо просто покажем сообщение
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             
             submitBtn.textContent = 'Отправка...';
             submitBtn.disabled = true;
             
-            setTimeout(() => {
-                alert('Сообщение отправлено! Мы свяжемся с вами в ближайшее время.');
-                contactForm.reset();
+            const formData = new FormData(this);
+            
+            fetch('/contacts', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    contactForm.reset();
+                } else {
+                    alert('Ошибка: ' + (data.errors ? data.errors.join(', ') : data.error));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке формы');
+            })
+            .finally(() => {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            }, 1500);
+            });
         });
     }
     
-    // Динамический поиск для врачей
-    const doctorSearchInput = document.getElementById('doctor-search');
-    const doctorSearchBtn = document.getElementById('search-doctor-btn');
-    const specialtyFilter = document.getElementById('specialty-filter');
+    // ============ ЗАПИСЬ НА ПРИЕМ ============
+    const appointmentModal = document.getElementById('appointmentModal');
+    const appointmentForm = document.getElementById('appointmentForm');
+    const specialtiesSelect = document.getElementById('specialtiesSelect');
+    const submitAppointmentBtn = document.getElementById('submitAppointment');
+    const doctorNameInput = document.getElementById('doctorName');
     
-    if (doctorSearchInput || specialtyFilter) {
-        function performDoctorSearch() {
-            // Здесь будет AJAX запрос для поиска врачей
-            console.log('Поиск врачей...');
+    // Проверяем, что все элементы существуют
+    if (appointmentModal && appointmentForm && specialtiesSelect && submitAppointmentBtn && doctorNameInput) {
+        
+        // Обработчик нажатия на кнопку "Запись" у врача
+        document.addEventListener('click', function(e) {
+            // Ищем ближайшую кнопку с классом btn-appointment
+            const appointmentBtn = e.target.closest('.btn-appointment');
+            
+            if (appointmentBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const doctorId = appointmentBtn.dataset.doctorId;
+                const doctorName = appointmentBtn.dataset.doctorName || 'Любой врач';
+                
+                console.log('Запись нажата:', { doctorId, doctorName });
+                
+                // Устанавливаем данные в форму
+                document.getElementById('appointmentDoctorId').value = doctorId || '';
+                doctorNameInput.value = doctorName;
+                
+                // Загружаем специальности врача
+                if (doctorId) {
+                    loadDoctorSpecialties(doctorId);
+                } else {
+                    loadAllSpecialties();
+                }
+                
+                // Показываем модальное окно
+                const modal = new bootstrap.Modal(appointmentModal);
+                modal.show();
+            }
+        });
+        
+        // Загрузка специальностей конкретного врача
+        function loadDoctorSpecialties(doctorId) {
+            specialtiesSelect.innerHTML = '<option value="">Загрузка специальностей...</option>';
+            specialtiesSelect.disabled = true;
+            
+            fetch(`/doctors/${doctorId}/specialties`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки');
+                    }
+                    return response.json();
+                })
+                .then(specialties => {
+                    specialtiesSelect.innerHTML = '';
+                    specialtiesSelect.disabled = false;
+                    
+                    specialties.forEach(specialty => {
+                        const option = document.createElement('option');
+                        option.value = specialty.id;
+                        option.textContent = specialty.name;
+                        specialtiesSelect.appendChild(option);
+                    });
+                    
+                    if (specialties.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = 'У врача нет специальностей';
+                        specialtiesSelect.appendChild(option);
+                        specialtiesSelect.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке специальностей:', error);
+                    specialtiesSelect.innerHTML = '<option value="">Ошибка загрузки</option>';
+                    specialtiesSelect.disabled = false;
+                });
         }
         
-        if (doctorSearchBtn) {
-            doctorSearchBtn.addEventListener('click', performDoctorSearch);
+        // Загрузка всех специальностей
+        function loadAllSpecialties() {
+            specialtiesSelect.innerHTML = '<option value="">Загрузка специальностей...</option>';
+            specialtiesSelect.disabled = true;
+            
+            fetch('/specialties')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Ошибка загрузки');
+                    }
+                    return response.json();
+                })
+                .then(specialties => {
+                    specialtiesSelect.innerHTML = '';
+                    specialtiesSelect.disabled = false;
+                    
+                    specialties.forEach(specialty => {
+                        const option = document.createElement('option');
+                        option.value = specialty.id;
+                        option.textContent = specialty.name;
+                        specialtiesSelect.appendChild(option);
+                    });
+                    
+                    if (specialties.length === 0) {
+                        const option = document.createElement('option');
+                        option.value = '';
+                        option.textContent = 'Специальности не найдены';
+                        specialtiesSelect.appendChild(option);
+                        specialtiesSelect.disabled = true;
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при загрузке специальностей:', error);
+                    specialtiesSelect.innerHTML = '<option value="">Ошибка загрузки</option>';
+                    specialtiesSelect.disabled = false;
+                });
         }
         
-        if (doctorSearchInput) {
-            doctorSearchInput.addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    performDoctorSearch();
+        // Отправка формы записи
+        submitAppointmentBtn.addEventListener('click', function() {
+            // Проверяем согласие с политикой
+            const privacyAccepted = document.getElementById('privacyAccepted');
+            if (!privacyAccepted.checked) {
+                alert('Необходимо принять условия политики конфиденциальности');
+                privacyAccepted.focus();
+                return;
+            }
+            
+            // Проверяем выбранные специальности
+            const selectedSpecialties = Array.from(specialtiesSelect.selectedOptions).map(option => option.value);
+            if (selectedSpecialties.length === 0 || selectedSpecialties[0] === '') {
+                alert('Пожалуйста, выберите хотя бы одну специальность');
+                specialtiesSelect.focus();
+                return;
+            }
+            
+            // Проверяем обязательные поля
+            const requiredFields = appointmentForm.querySelectorAll('[required]');
+            let isValid = true;
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    isValid = false;
+                    field.classList.add('is-invalid');
+                } else {
+                    field.classList.remove('is-invalid');
                 }
             });
-        }
-        
-        if (specialtyFilter) {
-            specialtyFilter.addEventListener('change', performDoctorSearch);
-        }
-    }
-    
-    // Динамический поиск для услуг
-    const serviceSearchInput = document.getElementById('service-search');
-    const serviceSearchBtn = document.getElementById('search-service-btn');
-    const categoryFilter = document.getElementById('category-filter');
-    
-    if (serviceSearchInput || categoryFilter) {
-        function performServiceSearch() {
-            // Здесь будет AJAX запрос для поиска услуг
-            console.log('Поиск услуг...');
-        }
-        
-        if (serviceSearchBtn) {
-            serviceSearchBtn.addEventListener('click', performServiceSearch);
-        }
-        
-        if (serviceSearchInput) {
-            serviceSearchInput.addEventListener('keyup', function(event) {
-                if (event.key === 'Enter') {
-                    performServiceSearch();
-                }
+            
+            if (!isValid) {
+                alert('Пожалуйста, заполните все обязательные поля');
+                return;
+            }
+            
+            // Собираем данные формы
+            const formData = new FormData(appointmentForm);
+            
+            // Добавляем выбранные специальности
+            selectedSpecialties.forEach(id => {
+                formData.append('specialty_ids[]', id);
             });
-        }
-        
-        if (categoryFilter) {
-            categoryFilter.addEventListener('change', performServiceSearch);
-        }
-    }
-    
-    // Улучшение мобильного опыта
-    if ('ontouchstart' in window) {
-        document.body.classList.add('touch-device');
+            
+            // Отправляем данные
+            submitAppointmentBtn.disabled = true;
+            submitAppointmentBtn.textContent = 'Отправка...';
+            
+            fetch('/appointments', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message);
+                    // Закрываем модальное окно
+                    bootstrap.Modal.getInstance(appointmentModal).hide();
+                    // Очищаем форму
+                    appointmentForm.reset();
+                    specialtiesSelect.innerHTML = '';
+                    doctorNameInput.value = '';
+                } else {
+                    alert('Ошибка: ' + (data.errors ? data.errors.join(', ') : data.error));
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке формы');
+            })
+            .finally(() => {
+                submitAppointmentBtn.disabled = false;
+                submitAppointmentBtn.textContent = 'Отправить запись';
+            });
+        });
     }
 });
 

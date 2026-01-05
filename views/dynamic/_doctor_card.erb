@@ -41,8 +41,11 @@
         
         <div class="mt-auto">
             <div class="d-flex justify-content-between align-items-center">
-                <a href="/contacts" class="btn btn-primary btn-sm">
-                    <i class="bi bi-calendar-check me-1"></i>Запись
+                <a href="#" 
+                   class="btn btn-primary btn-sm btn-appointment" 
+                   data-doctor-id="<%= doctor.id %>" 
+                   data-doctor-name="<%= doctor.full_name %>">
+                  <i class="bi bi-calendar-check me-1"></i>Запись
                 </a>
             </div>
         </div>
