@@ -102,6 +102,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body>
+        <% unless request.path.start_with?('/admin') %>
     <!-- Шапка -->
     <header class="header sticky-top bg-white shadow-sm">
         <nav class="navbar navbar-expand-lg navbar-light py-3">
@@ -230,6 +231,10 @@
             </div>
         </div>
     </footer>
+        <% else %>
+    <!-- Для админки - только контент -->
+    <%= yield %>
+    <% end %>
     
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

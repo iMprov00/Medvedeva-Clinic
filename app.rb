@@ -150,17 +150,14 @@ end
 
 # Простая аутентификация для админки
 before '/admin*' do
-  # Проверяем аутентификацию через HTTP Basic Auth
   auth = Rack::Auth::Basic::Request.new(request.env)
   
   unless auth.provided? && auth.basic? && auth.credentials && auth.credentials == ['admin', '123']
     response['WWW-Authenticate'] = 'Basic realm="Админка"'
     halt 401, "Требуется авторизация\n"
   end
-  
 end
 
-# Выход из админки (перезапрос авторизации)
 get '/admin/logout' do
   response['WWW-Authenticate'] = 'Basic realm="Админка"'
   halt 401, "Вы вышли из админки. Обновите страницу для повторного входа.\n"
@@ -174,19 +171,59 @@ end
 # Управление сообщениями
 get '/admin/messages' do
   @messages = Message.all
-  erb :'admin/messages'
+  erb :'admin/messages', layout: false
 end
 
 # Управление врачами
 get '/admin/doctors' do
   @doctors = Doctor.all.order(:last_name, :first_name)
-  erb :'admin/doctors'
+  erb :'admin/doctors', layout: false
 end
 
 # Добавление врача
+# Добавление врача
 post '/admin/doctors' do
-  Doctor.create(params[:doctor])
-  redirect '/admin/doctors'
+  begin
+    # Создаем врача
+    doctor = Doctor.create(
+      last_name: params[:doctor][:last_name],
+      first_name: params[:doctor][:first_name],
+      middle_name: params[:doctor][:middle_name],
+      experience_years: params[:doctor][:experience_years],
+      bio: params[:doctor][:bio],
+      photo_path: params[:doctor][:photo_path]
+    )
+    
+    # Добавляем специальности
+    if params[:doctor][:specialty_ids]
+      params[:doctor][:specialty_ids].each do |specialty_id|
+        specialty = Specialty.find(specialty_id)
+        doctor.specialties << specialty
+      end
+    end
+    
+    # Обработка загрузки фотографии
+    if params[:photo] && params[:photo][:tempfile]
+      photo = params[:photo]
+      photo_path = params[:doctor][:photo_path] || "/images/doctors/doctor_#{doctor.id}.jpg"
+      
+      # Создаем директорию если её нет
+      FileUtils.mkdir_p('public/images/doctors')
+      
+      # Сохраняем файл
+      File.open("public#{photo_path}", 'wb') do |f|
+        f.write(photo[:tempfile].read)
+      end
+      
+      # Обновляем путь к фото
+      doctor.update(photo_path: photo_path)
+    end
+    
+    redirect '/admin/doctors'
+  rescue => e
+    puts "Ошибка при добавлении врача: #{e.message}"
+    redirect '/admin/doctors'
+  end
 end
 
 # Удаление врача
@@ -198,7 +235,7 @@ end
 # Управление услугами
 get '/admin/prices' do
   @service_categories = ServiceCategory.includes(:services).all
-  erb :'admin/prices'
+  erb :'admin/prices', layout: false
 end
 
 # Добавление категории услуг
@@ -236,4 +273,61 @@ end
 post '/admin/messages/:id/delete' do
   Message.find(params[:id]).destroy
   redirect '/admin/messages'
+end
+
+get '/admin/specialties' do
+  @specialties = Specialty.all
+  erb :'admin/specialties', layout: false
+end
+
+# Добавление специальности
+post '/admin/specialties' do
+  Specialty.create(name: params[:name])
+  redirect '/admin/specialties'
+end
+
+# Удаление специальности
+post '/admin/specialties/:id/delete' do
+  specialty = Specialty.find(params[:id])
+  
+  # Проверяем, используется ли специальность врачами
+  if specialty.doctors.empty?
+    specialty.destroy
+  else
+    # Можно добавить flash сообщение об ошибке
+  end
+  
+  redirect '/admin/specialties'
+end
+
+
+# Хелпер для форматирования денег
+helpers do
+  def number_to_currency(number, options = {})
+    defaults = { unit: '₽', format: '%n %u' }
+    opts = defaults.merge(options)
+    
+    formatted_number = sprintf('%.2f', number.to_f)
+    formatted_number = formatted_number.gsub('.', ',')
+    formatted_number = formatted_number.gsub(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1 ")
+    
+    opts[:format].gsub('%n', formatted_number).gsub('%u', opts[:unit])
+  end
+  
+  # Функция для склонения русских слов
+  def russian_plural(number, one, few, many)
+    abs_number = number.to_i.abs
+    mod10 = abs_number % 10
+    mod100 = abs_number % 100
+    
+    if mod100.between?(11, 14)
+      return many
+    elsif mod10 == 1
+      return one
+    elsif mod10.between?(2, 4)
+      return few
+    else
+      return many
+    end
+  end
 end

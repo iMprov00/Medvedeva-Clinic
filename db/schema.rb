@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_05_010814) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_031917) do
   create_table "doctors", force: :cascade do |t|
     t.text "bio", null: false
     t.datetime "created_at", null: false
@@ -22,6 +22,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_010814) do
     t.text "specialties", null: false
     t.datetime "updated_at", null: false
     t.index ["last_name", "first_name", "middle_name"], name: "index_doctors_on_last_name_and_first_name_and_middle_name"
+  end
+
+  create_table "doctors_specialties", id: false, force: :cascade do |t|
+    t.integer "doctor_id", null: false
+    t.integer "specialty_id", null: false
+    t.index ["doctor_id", "specialty_id"], name: "index_doctors_specialties_on_doctor_id_and_specialty_id", unique: true
+    t.index ["specialty_id", "doctor_id"], name: "index_doctors_specialties_on_specialty_id_and_doctor_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -54,6 +61,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_05_010814) do
     t.index ["name"], name: "index_services_on_name"
     t.index ["price"], name: "index_services_on_price"
     t.index ["service_category_id"], name: "index_services_on_service_category_id"
+  end
+
+  create_table "specialties", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_specialties_on_name", unique: true
   end
 
   create_table "tests", force: :cascade do |t|
