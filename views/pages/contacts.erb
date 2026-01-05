@@ -296,16 +296,29 @@ document.addEventListener('DOMContentLoaded', function() {
             // Собираем данные формы
             const formData = new FormData(contactForm);
             
-            // Имитация отправки (замените на реальный AJAX запрос)
-            setTimeout(() => {
-                // Создаем уведомление об успехе
+            // Отправляем данные
+            fetch('/contacts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Создаем уведомление
+                const alertType = data.success ? 'success' : 'danger';
+                const icon = data.success ? 'check-circle-fill' : 'exclamation-circle-fill';
+                const title = data.success ? 'Сообщение отправлено!' : 'Ошибка!';
+                const message = data.success ? data.message : (data.errors ? data.errors.join(', ') : data.error);
+                
                 const alertHTML = `
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div class="alert alert-${alertType} alert-dismissible fade show" role="alert">
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-check-circle-fill fs-4 me-3"></i>
+                            <i class="bi bi-${icon} fs-4 me-3"></i>
                             <div>
-                                <h6 class="fw-bold mb-1">Сообщение отправлено!</h6>
-                                <p class="mb-0">Мы свяжемся с вами в ближайшее время.</p>
+                                <h6 class="fw-bold mb-1">${title}</h6>
+                                <p class="mb-0">${message}</p>
                             </div>
                         </div>
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -315,8 +328,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Вставляем алерт перед формой
                 contactForm.insertAdjacentHTML('beforebegin', alertHTML);
                 
-                // Сбрасываем форму
-                contactForm.reset();
+                // Сбрасываем форму только при успехе
+                if (data.success) {
+                    contactForm.reset();
+                }
                 
                 // Восстанавливаем кнопку
                 submitText.classList.remove('d-none');
@@ -330,11 +345,33 @@ document.addEventListener('DOMContentLoaded', function() {
                         bootstrap.Alert.getOrCreateInstance(alert).close();
                     }
                 }, 5000);
-            }, 1500);
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                
+                const alertHTML = `
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle-fill fs-4 me-3"></i>
+                            <div>
+                                <h6 class="fw-bold mb-1">Ошибка!</h6>
+                                <p class="mb-0">Произошла ошибка при отправке сообщения</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                
+                contactForm.insertAdjacentHTML('beforebegin', alertHTML);
+                
+                submitText.classList.remove('d-none');
+                loadingText.classList.add('d-none');
+                submitBtn.disabled = false;
+            });
         });
     }
     
-    // Маска для телефона
+    // Маска для телефона (оставляем как было)
     const phoneInput = document.getElementById('phone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {

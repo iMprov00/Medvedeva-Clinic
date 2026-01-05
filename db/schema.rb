@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_12_29_022515) do
+ActiveRecord::Schema[8.1].define(version: 2026_01_05_010814) do
   create_table "doctors", force: :cascade do |t|
     t.text "bio", null: false
     t.datetime "created_at", null: false
@@ -22,6 +22,17 @@ ActiveRecord::Schema[8.1].define(version: 2025_12_29_022515) do
     t.text "specialties", null: false
     t.datetime "updated_at", null: false
     t.index ["last_name", "first_name", "middle_name"], name: "index_doctors_on_last_name_and_first_name_and_middle_name"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email", null: false
+    t.text "message", null: false
+    t.string "name", null: false
+    t.string "phone", null: false
+    t.boolean "read", default: false
+    t.string "subject", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "service_categories", force: :cascade do |t|

@@ -1,0 +1,102 @@
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2">Управление врачами</h1>
+    </div>
+    
+    <!-- Форма добавления врача -->
+    <div class="card mb-5">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0"><i class="bi bi-person-plus me-2"></i>Добавить нового врача</h5>
+        </div>
+        <div class="card-body">
+            <form action="/admin/doctors" method="post">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="last_name" class="form-label">Фамилия *</label>
+                        <input type="text" class="form-control" id="last_name" name="doctor[last_name]" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="first_name" class="form-label">Имя *</label>
+                        <input type="text" class="form-control" id="first_name" name="doctor[first_name]" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="middle_name" class="form-label">Отчество</label>
+                        <input type="text" class="form-control" id="middle_name" name="doctor[middle_name]">
+                    </div>
+                    
+                    <div class="col-md-8">
+                        <label for="specialties" class="form-label">Специальности * (через запятую)</label>
+                        <input type="text" class="form-control" id="specialties" name="doctor[specialties]" 
+                               placeholder="Терапевт, Кардиолог" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="experience_years" class="form-label">Опыт работы (лет)</label>
+                        <input type="number" class="form-control" id="experience_years" 
+                               name="doctor[experience_years]" min="0" max="60">
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="bio" class="form-label">Биография *</label>
+                        <textarea class="form-control" id="bio" name="doctor[bio]" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="col-12">
+                        <label for="photo_path" class="form-label">Путь к фотографии</label>
+                        <input type="text" class="form-control" id="photo_path" name="doctor[photo_path]" 
+                               placeholder="/images/doctors/doctor1.jpg">
+                        <small class="text-muted">Оставьте пустым, если фото нет</small>
+                    </div>
+                    
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Добавить врача
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Список врачей -->
+    <div class="card">
+        <div class="card-header bg-light">
+            <h5 class="mb-0"><i class="bi bi-people me-2"></i>Список врачей (<%= @doctors.count %>)</h5>
+        </div>
+        <div class="card-body">
+            <% if @doctors.empty? %>
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Врачи не добавлены
+                </div>
+            <% else %>
+                <div class="row">
+                    <% @doctors.each do |doctor| %>
+                        <div class="col-md-6 col-lg-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title"><%= doctor.full_name %></h5>
+                                    <h6 class="card-subtitle mb-2 text-muted"><%= doctor.specialties %></h6>
+                                    <p class="card-text">
+                                        <small class="text-muted">
+                                            <i class="bi bi-clock-history me-1"></i>
+                                            <%= doctor.experience_text %>
+                                        </small>
+                                    </p>
+                                    <p class="card-text text-truncate"><%= doctor.bio.truncate(100) %></p>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <form action="/admin/doctors/<%= doctor.id %>/delete" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash me-1"></i>Удалить
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    <% end %>
+                </div>
+            <% end %>
+        </div>
+    </div>
+</div>
